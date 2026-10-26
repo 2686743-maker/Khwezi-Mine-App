@@ -26,16 +26,54 @@ MINE_IMAGE_URIS = [
 ]
 st.set_page_config(page_title="Khwezi Mining Monitor", page_icon=str(BRAND_ICON_PATH), layout="wide")
 
-NAVY, AMBER, GREEN, RED, BLUE = "#202824", "#D3A04C", "#55836E", "#C65D48", "#4C8D8A"
+NAVY, AMBER, GREEN, RED, BLUE = "#1F2723", "#D6A14A", "#4C7A62", "#B9503F", "#4F8A86"
 STATUS_COL = {"Normal": GREEN, "Warning": AMBER, "Critical": RED, "Low": GREEN, "Medium": "#C6A85D", "High": "#BB7049"}
+PAGE_ICONS = {
+    "Dashboard": "dashboard",
+    "Worker Safety": "engineering",
+    "Safety Incidents": "health_and_safety",
+    "Equipment": "precision_manufacturing",
+    "Maintenance": "build",
+    "Risk Assessment": "warning",
+    "Alerts": "notifications_active",
+    "Data Analysis": "monitoring",
+    "Reports": "description",
+    "Manage Users": "group",
+}
+BANNER_ICONS = {
+    "Mining Monitoring Dashboard": "dashboard",
+    "Worker Health and Safety": "engineering",
+    "Safety Incident Database": "health_and_safety",
+    "Equipment Condition Monitoring": "precision_manufacturing",
+    "Equipment Maintenance Monitoring": "build",
+    "Risk Assessment": "warning",
+    "Alerts and Notifications": "notifications_active",
+    "Interactive Data Analysis": "monitoring",
+    "Reports": "description",
+    "Manage Users": "group",
+}
+ICON_SVGS = {
+    "dashboard": '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/></svg>',
+    "engineering": '<svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v2"/></svg>',
+    "health_and_safety": '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>',
+    "precision_manufacturing": '<svg viewBox="0 0 24 24"><path d="M3 17h13l3 3H4a2 2 0 0 1-1-3ZM4 17V9h9v8M13 12h4l3 3v2M7 20v1m9-1v1"/><circle cx="7" cy="18" r="1"/><circle cx="17" cy="18" r="1"/></svg>',
+    "build": '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4L15 12l-3-3 2.7-2.7Z"/></svg>',
+    "warning": '<svg viewBox="0 0 24 24"><path d="M10.3 3.9 2.5 18a2 2 0 0 0 1.8 3h15.4a2 2 0 0 0 1.8-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg>',
+    "notifications_active": '<svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4M2 5l2 2m18-2-2 2"/></svg>',
+    "monitoring": '<svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 3 3 6-7M16 6h4v4"/></svg>',
+    "description": '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>',
+    "group": '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1ZM16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v2"/></svg>',
+}
 
 st.markdown(f"""<style>
-[data-testid="stAppViewContainer"] {{background:#E7E9E4;}}
-[data-testid="stSidebar"] {{background: linear-gradient(180deg,{NAVY},#394840);}}
+[data-testid="stAppViewContainer"] {{background:#E8E9E4;}}
+[data-testid="stSidebar"] {{width:260px !important;min-width:260px !important;background:{NAVY};border-right:1px solid #39443D;}}
 [data-testid="stSidebar"] * {{color:#fff !important;}}
-.banner {{background:linear-gradient(100deg,{NAVY},#4F7067);padding:18px 26px;border-radius:4px;color:#fff;margin-bottom:18px;border-left:5px solid {AMBER};}}
+.banner {{display:flex;align-items:center;gap:14px;background:linear-gradient(100deg,{NAVY},#6E542D);padding:16px 22px;border-radius:4px;color:#fff;margin-bottom:18px;border-left:4px solid {AMBER};}}
 .banner.login-banner {{display:flex;align-items:center;gap:14px;background:linear-gradient(110deg,#222D28,#354139);border-left-color:#B88746;border-radius:4px;}}
 .login-banner .brand-icon {{width:46px;height:46px;flex:0 0 46px;}}
+.banner-icon {{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;color:#E3B358;}}
+.banner-icon svg {{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}}
 .banner.login-banner h2 {{color:#F2F0E6;}} .banner.login-banner p {{color:#D2D4CA;}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) {{background:#18211E;}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stMainBlockContainer"] {{color:#ECEBE3;}}
@@ -44,9 +82,16 @@ body:has([data-testid="stForm"]) [data-testid="stHeader"] {{background:#18211E;}
 [data-testid="stAppViewContainer"]:has(.mine-backdrop) [data-testid="stMainBlockContainer"] {{background:transparent;}}
 body:has(.mine-backdrop) {{background:#18211E;}}
 body:has(.mine-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,30,.78);backdrop-filter:blur(12px);}}
-[data-testid="stMainBlockContainer"] > div:not(:has(.mine-backdrop)) {{position:relative;z-index:1;}}
+[data-testid="stAppViewContainer"]:has(.dashboard-backdrop) {{background:transparent;}}
+[data-testid="stAppViewContainer"]:has(.dashboard-backdrop) [data-testid="stMainBlockContainer"] {{background:transparent;}}
+body:has(.dashboard-backdrop) {{background:#18211E;}}
+body:has(.dashboard-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,30,.78);backdrop-filter:blur(12px);}}
+[data-testid="stMainBlockContainer"] {{position:relative;z-index:1;}}
 .mine-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
 .mine-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(12px) brightness(.32) saturate(.72);}}
+.dashboard-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
+.dashboard-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(9px) brightness(.55) saturate(.68);transform:scale(1.04);}}
+.dashboard-backdrop::after {{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(19,26,22,.48),rgba(19,26,22,.34));}}
 .login-visual-frame {{position:relative;width:100%;height:min(56vh,480px);min-height:260px;overflow:hidden;border:1px solid rgba(211,160,76,.55);border-radius:4px;background:#202824;}}
 .login-visual-frame img {{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:mine-carousel 24s infinite;}}
 .login-visual-frame img:nth-child(1) {{animation-delay:0s;}}
@@ -61,16 +106,34 @@ body:has(.mine-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,30,.78
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] input:focus {{border-color:#C18A46 !important;box-shadow:0 0 0 1px #C18A46 !important;outline:none;}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] button {{background:#B88746;color:#1B211D;border:0;border-radius:4px;}}
 .banner h2 {{margin:0;color:#fff;}} .banner p {{margin:2px 0 0;opacity:.85;}}
-.card {{background:#F8F8F4;border-radius:4px;padding:14px 16px;box-shadow:0 2px 8px rgba(22,31,27,.10);border-top:4px solid var(--c);margin-bottom:12px;}}
+.card {{display:flex;flex-direction:column;justify-content:center;min-height:104px;background:#F8F8F4;border-radius:4px;padding:14px 16px;box-shadow:0 2px 8px rgba(22,31,27,.10);border-top:4px solid var(--c);margin-bottom:12px;}}
 .card .v {{font-size:1.9rem;font-weight:700;color:var(--c);}} .card .l {{font-size:.85rem;color:#555;}}
 .badge {{display:inline-block;padding:2px 10px;border-radius:12px;color:#fff;font-size:.8rem;font-weight:600;}}
-.foot {{text-align:center;color:#777;font-size:.78rem;margin-top:30px;border-top:1px solid #ddd;padding-top:8px;}}
+.foot {{text-align:center;color:#D2D4CA;font-size:.78rem;margin-top:30px;border-top:1px solid rgba(255,255,255,.25);padding-top:8px;}}
+[data-testid="stSidebar"] [data-testid="stRadio"] label {{padding:8px 10px;border-left:3px solid transparent;border-radius:3px;transition:background .15s ease,border-color .15s ease;}}
+[data-testid="stSidebar"] [data-testid="stRadio"] label[data-testid="stRadioOption"] > div > div:first-child {{display:none;}}
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {{background:rgba(255,255,255,.07);}}
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {{background:rgba(214,161,74,.16);border-left-color:{AMBER};}}
+[data-testid="stSidebar"] [data-testid="stRadio"] label p {{font-size:.92rem;font-weight:500;}}
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {{background:{AMBER};color:#1B211D;border:0;border-radius:3px;}}
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] * {{color:#1B211D !important;}}
+.sidebar-brand {{display:flex;align-items:center;gap:10px;padding:7px 0 18px;border-bottom:1px solid #46514A;margin-bottom:16px;}}
+.sidebar-brand img {{width:38px;height:38px;}}
+.sidebar-brand strong {{display:block;font-size:1.02rem;line-height:1.2;color:#F2F0E6;}}
+.sidebar-brand small {{display:block;margin-top:3px;color:#C2C9C1;font-size:.65rem;letter-spacing:.08em;}}
+.sidebar-section {{margin:17px 0 7px;color:#D6A14A;font-size:.67rem;font-weight:700;letter-spacing:.09em;}}
+.sidebar-user {{padding:10px 0 2px;border-top:1px solid #46514A;margin-top:14px;}}
+.sidebar-user p {{margin:0;color:#F2F0E6;font-weight:600;}}
+.sidebar-user small {{color:#BFC8C0;font-size:.8rem;}}
 </style>""", unsafe_allow_html=True)
 
 
 # ---------- helpers ----------
 def banner(title, sub, class_name="", icon_uri=None):
-    icon = f'<img class="brand-icon" src="{icon_uri}" alt="Khwezi Mining logo">' if icon_uri else ""
+    if icon_uri:
+        icon = f'<img class="brand-icon" src="{icon_uri}" alt="Khwezi Mining logo">'
+    else:
+        icon = f'<span class="banner-icon" aria-hidden="true">{ICON_SVGS[BANNER_ICONS[title]]}</span>'
     st.markdown(f'<div class="banner {class_name}">{icon}<div><h2>{title}</h2><p>{sub}</p></div></div>', unsafe_allow_html=True)
 
 
@@ -126,7 +189,8 @@ def login_page():
 
 # ---------- pages ----------
 def page_dashboard(d):
-    banner("📊 Mining Monitoring Dashboard", "Key performance indicators across safety and equipment")
+    st.markdown(f'<div class="dashboard-backdrop" aria-hidden="true"><img src="{MINE_IMAGE_URIS[2]}" alt=""></div>', unsafe_allow_html=True)
+    banner("Mining Monitoring Dashboard", "Key performance indicators across safety and equipment")
     cards(L.kpis(d))
     eq, inc = d["equipment"], d["incidents"]
     c1, c2 = st.columns(2)
@@ -140,12 +204,12 @@ def page_dashboard(d):
     rk = L.risk_table(d["risks"])["Classification"].value_counts().rename_axis("Class").reset_index(name="Risks")
     c4.plotly_chart(px.bar(rk, x="Class", y="Risks", color="Class", title="Risk register classification", color_discrete_map=STATUS_COL | {"Critical": RED}), use_container_width=True)
     a = L.all_alerts(eq)
-    st.subheader(f"🚨 Latest critical alerts ({(a['Level'] == 'CRITICAL').sum()} active)")
+    st.subheader(f"Latest critical alerts ({(a['Level'] == 'CRITICAL').sum()} active)")
     show(a[a["Level"] == "CRITICAL"].head(8), ["Level"])
 
 
 def page_workers(d):
-    banner("👷 Worker Health and Safety", "PPE compliance, fatigue, training and risk level")
+    banner("Worker Health and Safety", "PPE compliance, fatigue, training and risk level")
     w = d["workers"]
     f1, f2, f3 = st.columns(3)
     dep = f1.multiselect("Department", sorted(w["Department"].unique())); sh = f2.multiselect("Shift", sorted(w["Shift"].unique())); rl = f3.multiselect("Risk level", ["Low", "Medium", "High", "Critical"])
@@ -157,12 +221,12 @@ def page_workers(d):
     c1, c2 = st.columns(2)
     c1.plotly_chart(px.pie(w, names="Risk_Level", title="Workers by risk level", color="Risk_Level", color_discrete_map=STATUS_COL), use_container_width=True)
     c2.plotly_chart(px.box(w, x="Department", y="Fatigue_Level", color="Department", title="Fatigue level by department", color_discrete_sequence=analysis.COLORS), use_container_width=True)
-    st.subheader("⚠️ Unsafe conditions detected")
+    st.subheader("Unsafe conditions detected")
     show(L.worker_alerts(w))
 
 
 def page_incidents(d):
-    banner("🦺 Safety Incident Database", "Add, search, filter and analyse incidents")
+    banner("Safety Incident Database", "Add, search, filter and analyse incidents")
     inc = d["incidents"]
     tab1, tab2, tab3 = st.tabs(["View / Search", "Add incident", "Trends"])
     with tab1:
@@ -210,7 +274,7 @@ def live_equipment(eq):
 
 
 def page_equipment(d):
-    banner("🚜 Equipment Condition Monitoring", "Temperature and vibration against prototype thresholds")
+    banner("Equipment Condition Monitoring", "Temperature and vibration against prototype thresholds")
     e = live_equipment(d["equipment"])
     a, b = st.columns(2)
     typ = a.multiselect("Equipment type", sorted(e["Equipment_Type"].unique())); stt = b.multiselect("Overall status", ["Normal", "Warning", "Critical"])
@@ -230,7 +294,7 @@ def page_equipment(d):
 
 
 def page_maintenance(d):
-    banner("🔧 Equipment Maintenance Monitoring", "Availability = Operating / (Operating + Downtime) x 100")
+    banner("Equipment Maintenance Monitoring", "Availability = Operating / (Operating + Downtime) x 100")
     e = d["equipment"].copy(); e["Availability (calc) %"] = [L.calculate_availability(o, dn) for o, dn in zip(e["Period_Operating_Hours"], e["Downtime_Hours"])]
     cards({"Due soon (14 days)": int(e["Due_Soon"].sum()), "Overdue": int(e["Overdue"].sum()), "Under maintenance": int(e["Under_Maintenance"].sum()), "Excessive downtime": int(e["Excessive_Downtime"].sum()), "Repeated alerts": int(e["Repeated_Alerts"].sum()), "Low availability": int(e["Low_Availability"].sum())}, 3)
     cols = ["Equipment_ID", "Equipment_Type", "Department", "Next_Maintenance_Date", "Days_To_Next_Maintenance", "Availability (calc) %", "Downtime_Hours", "Priority_Tier"]
@@ -242,7 +306,7 @@ def page_maintenance(d):
 
 
 def page_risk(d):
-    banner("⚖️ Risk Assessment", "Risk Score = Likelihood x Consequence (1-5 scale)")
+    banner("Risk Assessment", "Risk Score = Likelihood x Consequence (1-5 scale)")
     rt = L.risk_table(d["risks"])
     for _, r in rt[rt["Classification"].isin(["High", "Critical"])].head(5).iterrows():
         (st.error if r["Classification"] == "Critical" else st.warning)(f"{r['Risk_ID']} - {r['Hazard_Category']} ({r['Department']}): {L.risk_warning(r['Risk_Score'])}")
@@ -257,7 +321,7 @@ def page_risk(d):
 
 
 def page_alerts(d):
-    banner("🚨 Alerts and Notifications", "Generated automatically from the predefined conditions")
+    banner("Alerts and Notifications", "Generated automatically from the predefined conditions")
     if allowed("Equipment data"):
         a = L.all_alerts(d["equipment"]); lvl = st.radio("Level", ["All", "CRITICAL", "WARNING"], horizontal=True)
         if lvl != "All": a = a[a["Level"] == lvl]
@@ -269,7 +333,7 @@ def page_alerts(d):
 
 
 def page_analysis(d):
-    banner("🔍 Interactive Data Analysis", "Answer mining engineering questions from the data")
+    banner("Interactive Data Analysis", "Answer mining engineering questions from the data")
     inc = d["incidents"]; lo, hi = inc["Date"].min().date(), inc["Date"].max().date()
     rng = st.date_input("Incident period", (lo, hi), min_value=lo, max_value=hi)
     if len(rng) == 2: inc = inc[(inc["Date"] >= pd.Timestamp(rng[0])) & (inc["Date"] <= pd.Timestamp(rng[1]))]
@@ -282,24 +346,24 @@ def page_analysis(d):
 
 
 def page_reports(d):
-    banner("📄 Reports", "Download data and summaries as CSV")
+    banner("Reports", "Download data and summaries as CSV")
     inc = d["incidents"]
     if allowed("Safety incidents"):
-        st.download_button("⬇ Incident summary (by department & severity)", inc.groupby(["Department", "Severity"]).size().reset_index(name="Incidents").to_csv(index=False), "incident_summary.csv")
+        st.download_button("Incident summary (by department & severity)", inc.groupby(["Department", "Severity"]).size().reset_index(name="Incidents").to_csv(index=False), "incident_summary.csv")
     if allowed("Equipment data"):
-        st.download_button("⬇ Equipment alerts", L.all_alerts(d["equipment"]).to_csv(index=False), "equipment_alerts.csv")
-        st.download_button("⬇ Maintenance priority list", d["equipment"].sort_values("Priority_Score", ascending=False)[["Equipment_ID", "Equipment_Type", "Maintenance_Status", "Priority_Score", "Priority_Tier", "Recommended_Action"]].to_csv(index=False), "maintenance_priority.csv")
+        st.download_button("Equipment alerts", L.all_alerts(d["equipment"]).to_csv(index=False), "equipment_alerts.csv")
+        st.download_button("Maintenance priority list", d["equipment"].sort_values("Priority_Score", ascending=False)[["Equipment_ID", "Equipment_Type", "Maintenance_Status", "Priority_Score", "Priority_Tier", "Recommended_Action"]].to_csv(index=False), "maintenance_priority.csv")
     if allowed("Risk assessment"):
-        st.download_button("⬇ Risk register with scores", L.risk_table(d["risks"]).to_csv(index=False), "risk_register_scored.csv")
+        st.download_button("Risk register with scores", L.risk_table(d["risks"]).to_csv(index=False), "risk_register_scored.csv")
     if allowed("Worker safety data"):
-        st.download_button("⬇ Worker safety warnings", L.worker_alerts(d["workers"]).to_csv(index=False), "worker_warnings.csv")
+        st.download_button("Worker safety warnings", L.worker_alerts(d["workers"]).to_csv(index=False), "worker_warnings.csv")
     st.subheader("Management recommendations")
     k = L.kpis(d); recs = [f"Inspect the **{k['Critical equipment']}** critical machines immediately.", f"Schedule the **{k['Overdue maintenance']}** overdue maintenance jobs.", f"Raise PPE compliance (currently **{k['PPE compliance %']}%**).", f"Close the **{k['Open incidents']}** open or under-investigation incidents."]
     for r in recs: st.markdown(f"- {r}")
 
 
 def page_users(d):
-    banner("👥 Manage Users", "Administrator only")
+    banner("Manage Users", "Administrator only")
     u = d["users"]; show(u.drop(columns=["Salt", "Password_Hash"]))
     with st.form("new_user", clear_on_submit=True):
         c1, c2, c3 = st.columns(3); un = c1.text_input("Username"); nm = c2.text_input("Full name"); pw = c3.text_input("Password", type="password")
@@ -320,9 +384,9 @@ def page_users(d):
 
 
 # ---------- main ----------
-PAGES = {"📊 Dashboard": ("View dashboard", page_dashboard), "👷 Worker Safety": ("Worker safety data", page_workers), "🦺 Safety Incidents": ("Safety incidents", page_incidents),
-         "🚜 Equipment": ("Equipment data", page_equipment), "🔧 Maintenance": ("Maintenance data", page_maintenance), "⚖️ Risk Assessment": ("Risk assessment", page_risk),
-         "🚨 Alerts": ("View dashboard", page_alerts), "🔍 Data Analysis": ("View dashboard", page_analysis), "📄 Reports": ("Generate reports", page_reports), "👥 Manage Users": ("Manage users", page_users)}
+PAGES = {"Dashboard": ("View dashboard", page_dashboard), "Worker Safety": ("Worker safety data", page_workers), "Safety Incidents": ("Safety incidents", page_incidents),
+         "Equipment": ("Equipment data", page_equipment), "Maintenance": ("Maintenance data", page_maintenance), "Risk Assessment": ("Risk assessment", page_risk),
+         "Alerts": ("View dashboard", page_alerts), "Data Analysis": ("View dashboard", page_analysis), "Reports": ("Generate reports", page_reports), "Manage Users": ("Manage users", page_users)}
 
 
 def main():
@@ -330,11 +394,15 @@ def main():
     if "user" not in st.session_state: login_page(); return
     user, d = st.session_state["user"], st.session_state["d"]
     menu = [p for p, (fn, _) in PAGES.items() if auth.has_access(d["perms"], user["Role"], fn)]
+    selected_page = st.session_state.get("app_page_navigation")
+    if selected_page not in menu:
+        st.session_state["app_page_navigation"] = menu[0]
     with st.sidebar:
-        st.markdown("## ⛏️ Khwezi Mining")
-        st.markdown(f"**{user['Full_Name']}**  \n{user['Role']}")
-        page = st.radio("Navigation", menu, label_visibility="collapsed")
-        if st.button("Logout", use_container_width=True): st.session_state.pop("user"); st.rerun()
+        st.markdown(f'<div class="sidebar-brand"><img src="{BRAND_ICON_URI}" alt=""><div><strong>Khwezi Mining</strong><small>OPERATIONS MONITOR</small></div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sidebar-section">PAGES</div>', unsafe_allow_html=True)
+        page = st.radio("Pages", menu, format_func=lambda item: f":material/{PAGE_ICONS[item]}: {item}", label_visibility="collapsed", key="app_page_navigation")
+        st.markdown(f'<div class="sidebar-user"><p>{user["Full_Name"]}</p><small>{user["Role"]}</small></div>', unsafe_allow_html=True)
+        if st.button("Log out", type="primary", use_container_width=True): st.session_state.pop("user"); st.rerun()
     try:
         PAGES[page][1](d)
     except Exception as ex:  # error prevention: show a message instead of crashing the app
