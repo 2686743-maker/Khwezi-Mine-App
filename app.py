@@ -14,6 +14,16 @@ import logic as L
 
 BRAND_ICON_PATH = Path(__file__).parent / "assets" / "khwezi-mark.svg"
 BRAND_ICON_URI = "data:image/svg+xml;base64," + base64.b64encode(BRAND_ICON_PATH.read_bytes()).decode("ascii")
+ROOT = Path(__file__).parent
+MINE_IMAGE_PATHS = (
+    ROOT / "preview.webp",
+    ROOT / "preview 2.webp",
+    ROOT / "open-pit-mine-heavy-dump-trucks-transporting-rare-earth-minerals-panoramic-view-mining-site-multiple-large-yellow-390194899.webp",
+)
+MINE_IMAGE_URIS = [
+    "data:image/webp;base64," + base64.b64encode(path.read_bytes()).decode("ascii")
+    for path in MINE_IMAGE_PATHS
+]
 st.set_page_config(page_title="Khwezi Mining Monitor", page_icon=str(BRAND_ICON_PATH), layout="wide")
 
 NAVY, AMBER, GREEN, RED, BLUE = "#202824", "#D3A04C", "#55836E", "#C65D48", "#4C8D8A"
@@ -30,6 +40,20 @@ st.markdown(f"""<style>
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) {{background:#18211E;}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stMainBlockContainer"] {{color:#ECEBE3;}}
 body:has([data-testid="stForm"]) [data-testid="stHeader"] {{background:#18211E;}}
+[data-testid="stAppViewContainer"]:has(.mine-backdrop) {{background:transparent;}}
+[data-testid="stAppViewContainer"]:has(.mine-backdrop) [data-testid="stMainBlockContainer"] {{background:transparent;}}
+body:has(.mine-backdrop) {{background:#18211E;}}
+body:has(.mine-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,30,.78);backdrop-filter:blur(12px);}}
+[data-testid="stMainBlockContainer"] > div:not(:has(.mine-backdrop)) {{position:relative;z-index:1;}}
+.mine-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
+.mine-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(12px) brightness(.32) saturate(.72);}}
+.login-visual-frame {{position:relative;width:100%;height:min(56vh,480px);min-height:260px;overflow:hidden;border:1px solid rgba(211,160,76,.55);border-radius:4px;background:#202824;}}
+.login-visual-frame img {{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:mine-carousel 24s infinite;}}
+.login-visual-frame img:nth-child(1) {{animation-delay:0s;}}
+.login-visual-frame img:nth-child(2) {{animation-delay:-8s;}}
+.login-visual-frame img:nth-child(3) {{animation-delay:-16s;}}
+.login-visual-frame::after {{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(22,30,27,.28));pointer-events:none;}}
+@keyframes mine-carousel {{0%,27% {{opacity:1;}}34%,93% {{opacity:0;}}100% {{opacity:1;}}}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] {{background:#252F2A;border:1px solid #48534A;border-top:3px solid #B88746;padding:20px;border-radius:4px;}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] [data-testid="stWidgetLabel"], [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] [data-testid="stWidgetLabel"] * {{color:#D2D4CA !important;}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] [data-testid="stTextInputRootElement"] {{background:transparent !important;border-color:#57645A !important;}}
@@ -79,9 +103,14 @@ def allowed(function):
 
 # ---------- login ----------
 def login_page():
+    backdrop = f'<div class="mine-backdrop" aria-hidden="true"><img src="{MINE_IMAGE_URIS[1]}" alt=""></div>'
+    st.markdown(backdrop, unsafe_allow_html=True)
     banner("Khwezi Mining", "Health, Safety and Equipment Monitoring Application — secure login", "login-banner", BRAND_ICON_URI)
-    _, mid, _ = st.columns([1, 1.2, 1])
-    with mid, st.form("login"):
+    visual_col, login_col = st.columns([1.2, .8], gap="large", vertical_alignment="center")
+    with visual_col:
+        slides = "".join(f'<img src="{uri}" alt="Open-pit mining operation">' for uri in MINE_IMAGE_URIS)
+        st.markdown(f'<div class="login-visual-frame" role="img" aria-label="Rotating mine site photographs">{slides}</div>', unsafe_allow_html=True)
+    with login_col, st.form("login"):
         st.subheader("Sign in")
         u = st.text_input("Username"); p = st.text_input("Password", type="password")
         if st.form_submit_button("Login", use_container_width=True):
