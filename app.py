@@ -88,15 +88,15 @@ body:has(.dashboard-backdrop) {{background:#18211E;}}
 body:has(.dashboard-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,30,.78);backdrop-filter:blur(12px);}}
 [data-testid="stMainBlockContainer"] {{position:relative;z-index:1;}}
 .mine-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
-.mine-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(12px) brightness(.32) saturate(.72);}}
+.mine-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(15px) brightness(.32) saturate(.72);}}
 .dashboard-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
-.dashboard-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(9px) brightness(.55) saturate(.68);transform:scale(1.04);}}
+.dashboard-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(12px) brightness(.55) saturate(.68);transform:scale(1.04);}}
 .dashboard-backdrop::after {{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(19,26,22,.48),rgba(19,26,22,.34));}}
 .login-visual-frame {{position:relative;width:100%;height:min(56vh,480px);min-height:260px;overflow:hidden;border:1px solid rgba(211,160,76,.55);border-radius:4px;background:#202824;}}
-.login-visual-frame img {{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:mine-carousel 24s infinite;}}
+.login-visual-frame img {{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:mine-carousel 21s infinite;}}
 .login-visual-frame img:nth-child(1) {{animation-delay:0s;}}
-.login-visual-frame img:nth-child(2) {{animation-delay:-8s;}}
-.login-visual-frame img:nth-child(3) {{animation-delay:-16s;}}
+.login-visual-frame img:nth-child(2) {{animation-delay:-14s;}}
+.login-visual-frame img:nth-child(3) {{animation-delay:-7s;}}
 .login-visual-frame::after {{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(22,30,27,.28));pointer-events:none;}}
 @keyframes mine-carousel {{0%,27% {{opacity:1;}}34%,93% {{opacity:0;}}100% {{opacity:1;}}}}
 [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] {{background:#252F2A;border:1px solid #48534A;border-top:3px solid #B88746;padding:20px;border-radius:4px;}}
