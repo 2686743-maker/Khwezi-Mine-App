@@ -12,8 +12,8 @@ import auth
 import data_loader as dl
 import logic as L
 
-BRAND_ICON_PATH = Path(__file__).parent / "assets" / "khwezi-mark.svg"
-BRAND_ICON_URI = "data:image/svg+xml;base64," + base64.b64encode(BRAND_ICON_PATH.read_bytes()).decode("ascii")
+BRAND_ICON_PATH = Path(__file__).parent / "assets" / "khwezi-logo-icon.png"
+BRAND_ICON_URI = "data:image/png;base64," + base64.b64encode(BRAND_ICON_PATH.read_bytes()).decode("ascii")
 ROOT = Path(__file__).parent
 MINE_IMAGE_PATHS = (
     ROOT / "preview.webp",
@@ -71,7 +71,7 @@ st.markdown(f"""<style>
 [data-testid="stSidebar"] * {{color:#fff !important;}}
 .banner {{display:flex;align-items:center;gap:14px;background:linear-gradient(100deg,{NAVY},#6E542D);padding:16px 22px;border-radius:4px;color:#fff;margin-bottom:18px;border-left:4px solid {AMBER};}}
 .banner.login-banner {{display:flex;align-items:center;gap:18px;background:linear-gradient(110deg,#222D28,#354139);border-left-color:#B88746;border-radius:4px;}}
-.login-banner .brand-icon {{width:68px;height:68px;flex:0 0 68px;}}
+.login-banner .brand-icon {{width:62px;height:72px;flex:0 0 62px;object-fit:contain;}}
 .login-banner h2 {{font-size:1.85rem;font-weight:700;line-height:1.1;}}
 .login-banner p {{margin-top:7px !important;font-size:.72rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;}}
 .banner-icon {{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;color:#E3B358;}}
@@ -90,11 +90,11 @@ body:has(.dashboard-backdrop) {{background:#18211E;}}
 body:has(.dashboard-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,30,.78);backdrop-filter:blur(12px);}}
 [data-testid="stMainBlockContainer"] {{position:relative;z-index:1;}}
 .mine-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
-.mine-backdrop img {{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;filter:blur(15px) brightness(.5) saturate(.72);animation:mine-carousel 21s infinite;}}
+.mine-backdrop img {{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;filter:blur(2px) brightness(.68) saturate(.88);animation:mine-carousel 21s infinite;}}
 .mine-backdrop img:nth-child(1) {{animation-delay:0s;}}
 .mine-backdrop img:nth-child(2) {{animation-delay:-14s;}}
 .mine-backdrop img:nth-child(3) {{animation-delay:-7s;}}
-.mine-backdrop::after {{content:"";position:absolute;inset:0;background:linear-gradient(110deg,rgba(18,25,21,.38),rgba(18,25,21,.24));pointer-events:none;}}
+.mine-backdrop::after {{content:"";position:absolute;inset:0;background:linear-gradient(110deg,rgba(18,25,21,.16),rgba(18,25,21,.08));pointer-events:none;}}
 .dashboard-backdrop {{position:fixed;inset:-18px;z-index:0;overflow:hidden;pointer-events:none;}}
 .dashboard-backdrop img {{width:100%;height:100%;object-fit:cover;filter:blur(12px) brightness(.55) saturate(.68);transform:scale(1.04);}}
 .dashboard-backdrop::after {{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(19,26,22,.48),rgba(19,26,22,.34));}}
@@ -118,7 +118,7 @@ body:has(.dashboard-backdrop) [data-testid="stHeader"] {{background:rgba(24,33,3
 [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {{background:{AMBER};color:#1B211D;border:0;border-radius:3px;}}
 [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] * {{color:#1B211D !important;}}
 .sidebar-brand {{display:flex;align-items:center;gap:10px;padding:7px 0 18px;border-bottom:1px solid #46514A;margin-bottom:16px;}}
-.sidebar-brand img {{width:38px;height:38px;}}
+.sidebar-brand img {{width:33px;height:38px;object-fit:contain;}}
 .sidebar-brand strong {{display:block;font-size:1.02rem;line-height:1.2;color:#F2F0E6;}}
 .sidebar-brand small {{display:block;margin-top:3px;color:#C2C9C1;font-size:.65rem;letter-spacing:.08em;}}
 .sidebar-section {{margin:17px 0 7px;color:#D6A14A;font-size:.67rem;font-weight:700;letter-spacing:.09em;}}
