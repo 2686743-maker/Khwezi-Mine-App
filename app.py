@@ -70,8 +70,10 @@ st.markdown(f"""<style>
 [data-testid="stSidebar"] {{width:260px !important;min-width:260px !important;background:{NAVY};border-right:1px solid #39443D;}}
 [data-testid="stSidebar"] * {{color:#fff !important;}}
 .banner {{display:flex;align-items:center;gap:14px;background:linear-gradient(100deg,{NAVY},#6E542D);padding:16px 22px;border-radius:4px;color:#fff;margin-bottom:18px;border-left:4px solid {AMBER};}}
-.banner.login-banner {{display:flex;align-items:center;gap:14px;background:linear-gradient(110deg,#222D28,#354139);border-left-color:#B88746;border-radius:4px;}}
-.login-banner .brand-icon {{width:46px;height:46px;flex:0 0 46px;}}
+.banner.login-banner {{display:flex;align-items:center;gap:18px;background:linear-gradient(110deg,#222D28,#354139);border-left-color:#B88746;border-radius:4px;}}
+.login-banner .brand-icon {{width:68px;height:68px;flex:0 0 68px;}}
+.login-banner h2 {{font-size:1.85rem;font-weight:700;line-height:1.1;}}
+.login-banner p {{margin-top:7px !important;font-size:.72rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;}}
 .banner-icon {{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;color:#E3B358;}}
 .banner-icon svg {{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}}
 .banner.login-banner h2 {{color:#F2F0E6;}} .banner.login-banner p {{color:#D2D4CA;}}
@@ -168,7 +170,7 @@ def allowed(function):
 def login_page():
     backdrop = f'<div class="mine-backdrop" aria-hidden="true"><img src="{MINE_IMAGE_URIS[1]}" alt=""></div>'
     st.markdown(backdrop, unsafe_allow_html=True)
-    banner("Khwezi Mining", "Health, Safety and Equipment Monitoring Application — secure login", "login-banner", BRAND_ICON_URI)
+    banner("Khwezi Mining", "Real-time insights. Safer operations. Higher performance.", "login-banner", BRAND_ICON_URI)
     visual_col, login_col = st.columns([1.2, .8], gap="large", vertical_alignment="center")
     with visual_col:
         slides = "".join(f'<img src="{uri}" alt="Open-pit mining operation">' for uri in MINE_IMAGE_URIS)
@@ -398,7 +400,7 @@ def main():
     if selected_page not in menu:
         st.session_state["app_page_navigation"] = menu[0]
     with st.sidebar:
-        st.markdown(f'<div class="sidebar-brand"><img src="{BRAND_ICON_URI}" alt=""><div><strong>Khwezi Mining</strong><small>OPERATIONS MONITOR</small></div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="sidebar-brand"><img src="{BRAND_ICON_URI}" alt=""><div><strong>Khwezi Mining</strong><small>REAL-TIME INSIGHTS</small></div></div>', unsafe_allow_html=True)
         st.markdown('<div class="sidebar-section">PAGES</div>', unsafe_allow_html=True)
         page = st.radio("Pages", menu, format_func=lambda item: f":material/{PAGE_ICONS[item]}: {item}", label_visibility="collapsed", key="app_page_navigation")
         st.markdown(f'<div class="sidebar-user"><p>{user["Full_Name"]}</p><small>{user["Role"]}</small></div>', unsafe_allow_html=True)
