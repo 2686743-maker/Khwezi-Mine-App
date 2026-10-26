@@ -1,5 +1,8 @@
 """app.py - Khwezi Mining Health, Safety and Equipment Monitoring Application (Streamlit).
 Run with:  streamlit run app.py"""
+import base64
+from pathlib import Path
+
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -9,17 +12,32 @@ import auth
 import data_loader as dl
 import logic as L
 
-st.set_page_config(page_title="Khwezi Mining Monitor", page_icon="⛏️", layout="wide")
+BRAND_ICON_PATH = Path(__file__).parent / "assets" / "khwezi-mark.svg"
+BRAND_ICON_URI = "data:image/svg+xml;base64," + base64.b64encode(BRAND_ICON_PATH.read_bytes()).decode("ascii")
+st.set_page_config(page_title="Khwezi Mining Monitor", page_icon=str(BRAND_ICON_PATH), layout="wide")
 
-NAVY, AMBER, GREEN, RED, BLUE = "#0B1F3A", "#F5A623", "#2E9E5B", "#D62839", "#1F6FEB"
-STATUS_COL = {"Normal": GREEN, "Warning": AMBER, "Critical": RED, "Low": GREEN, "Medium": "#F2C94C", "High": "#E67E22"}
+NAVY, AMBER, GREEN, RED, BLUE = "#202824", "#D3A04C", "#55836E", "#C65D48", "#4C8D8A"
+STATUS_COL = {"Normal": GREEN, "Warning": AMBER, "Critical": RED, "Low": GREEN, "Medium": "#C6A85D", "High": "#BB7049"}
 
 st.markdown(f"""<style>
-[data-testid="stSidebar"] {{background: linear-gradient(180deg,{NAVY},#14325C);}}
+[data-testid="stAppViewContainer"] {{background:#E7E9E4;}}
+[data-testid="stSidebar"] {{background: linear-gradient(180deg,{NAVY},#394840);}}
 [data-testid="stSidebar"] * {{color:#fff !important;}}
-.banner {{background:linear-gradient(90deg,{NAVY},{BLUE});padding:18px 26px;border-radius:12px;color:#fff;margin-bottom:18px;border-left:8px solid {AMBER};}}
+.banner {{background:linear-gradient(100deg,{NAVY},#4F7067);padding:18px 26px;border-radius:4px;color:#fff;margin-bottom:18px;border-left:5px solid {AMBER};}}
+.banner.login-banner {{display:flex;align-items:center;gap:14px;background:linear-gradient(110deg,#222D28,#354139);border-left-color:#B88746;border-radius:4px;}}
+.login-banner .brand-icon {{width:46px;height:46px;flex:0 0 46px;}}
+.banner.login-banner h2 {{color:#F2F0E6;}} .banner.login-banner p {{color:#D2D4CA;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) {{background:#18211E;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stMainBlockContainer"] {{color:#ECEBE3;}}
+body:has([data-testid="stForm"]) [data-testid="stHeader"] {{background:#18211E;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] {{background:#252F2A;border:1px solid #48534A;border-top:3px solid #B88746;padding:20px;border-radius:4px;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] [data-testid="stWidgetLabel"], [data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] [data-testid="stWidgetLabel"] * {{color:#D2D4CA !important;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] [data-testid="stTextInputRootElement"] {{background:transparent !important;border-color:#57645A !important;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] input {{background:#161E1B;color:#F3F0E8;border-color:#57645A;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] input:focus {{border-color:#C18A46 !important;box-shadow:0 0 0 1px #C18A46 !important;outline:none;}}
+[data-testid="stAppViewContainer"]:has([data-testid="stForm"]) [data-testid="stForm"] button {{background:#B88746;color:#1B211D;border:0;border-radius:4px;}}
 .banner h2 {{margin:0;color:#fff;}} .banner p {{margin:2px 0 0;opacity:.85;}}
-.card {{background:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.10);border-top:5px solid var(--c);margin-bottom:12px;}}
+.card {{background:#F8F8F4;border-radius:4px;padding:14px 16px;box-shadow:0 2px 8px rgba(22,31,27,.10);border-top:4px solid var(--c);margin-bottom:12px;}}
 .card .v {{font-size:1.9rem;font-weight:700;color:var(--c);}} .card .l {{font-size:.85rem;color:#555;}}
 .badge {{display:inline-block;padding:2px 10px;border-radius:12px;color:#fff;font-size:.8rem;font-weight:600;}}
 .foot {{text-align:center;color:#777;font-size:.78rem;margin-top:30px;border-top:1px solid #ddd;padding-top:8px;}}
@@ -27,12 +45,13 @@ st.markdown(f"""<style>
 
 
 # ---------- helpers ----------
-def banner(title, sub):
-    st.markdown(f'<div class="banner"><h2>{title}</h2><p>{sub}</p></div>', unsafe_allow_html=True)
+def banner(title, sub, class_name="", icon_uri=None):
+    icon = f'<img class="brand-icon" src="{icon_uri}" alt="Khwezi Mining logo">' if icon_uri else ""
+    st.markdown(f'<div class="banner {class_name}">{icon}<div><h2>{title}</h2><p>{sub}</p></div></div>', unsafe_allow_html=True)
 
 
 def cards(items, cols=4):
-    palette = [BLUE, AMBER, GREEN, RED, "#8E44AD", "#16A5A5"]
+    palette = [BLUE, AMBER, GREEN, RED, "#867254", "#6F9C96"]
     cs = st.columns(cols)
     for i, (label, value) in enumerate(items.items()):
         cs[i % cols].markdown(f'<div class="card" style="--c:{palette[i % len(palette)]}"><div class="v">{value}</div><div class="l">{label}</div></div>', unsafe_allow_html=True)
@@ -60,7 +79,7 @@ def allowed(function):
 
 # ---------- login ----------
 def login_page():
-    banner("⛏️ Khwezi Mining", "Health, Safety and Equipment Monitoring Application — secure login")
+    banner("Khwezi Mining", "Health, Safety and Equipment Monitoring Application — secure login", "login-banner", BRAND_ICON_URI)
     _, mid, _ = st.columns([1, 1.2, 1])
     with mid, st.form("login"):
         st.subheader("Sign in")

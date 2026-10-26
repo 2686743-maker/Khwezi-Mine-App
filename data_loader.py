@@ -2,7 +2,8 @@
 from pathlib import Path
 import pandas as pd
 
-DATA = Path(__file__).parent / "data"
+ROOT = Path(__file__).parent
+DATA = ROOT / "data" if (ROOT / "data" / "Equipment_database.csv").exists() else ROOT
 
 
 def load_all():
