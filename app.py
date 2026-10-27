@@ -36,7 +36,7 @@ PAGE_ICONS = {
     "Maintenance": "build",
     "Risk Assessment": "warning",
     "Alerts": "notifications_active",
-    "Data Analysis": "monitoring",
+    "Questions & Answers": "monitoring",
     "Reports": "description",
     "Manage Users": "group",
 }
@@ -48,7 +48,7 @@ BANNER_ICONS = {
     "Equipment Maintenance Monitoring": "build",
     "Risk Assessment": "warning",
     "Alerts and Notifications": "notifications_active",
-    "Interactive Data Analysis": "monitoring",
+    "Questions & Answers": "monitoring",
     "Reports": "description",
     "Manage Users": "group",
 }
@@ -331,13 +331,46 @@ def page_alerts(d):
 
 
 def page_analysis(d):
-    banner("Interactive Data Analysis", "Answer mining engineering questions from the data")
+    banner("Questions & Answers", "Tap a question to generate an answer from the app's data")
     inc = d["incidents"]; lo, hi = inc["Date"].min().date(), inc["Date"].max().date()
     rng = st.date_input("Incident period", (lo, hi), min_value=lo, max_value=hi)
     if len(rng) == 2: inc = inc[(inc["Date"] >= pd.Timestamp(rng[0])) & (inc["Date"] <= pd.Timestamp(rng[1]))]
-    ok = {q: v for q, v in analysis.QUESTIONS.items() if v[0] == "both" and allowed("Equipment data") and allowed("Worker safety data") or v[0] == "equipment" and allowed("Equipment data") or v[0] == "safety" and allowed("Safety incidents")}
-    q = st.selectbox("Choose a question", list(ok))
-    table, fig, text = ok[q][1](d, inc)
+    ok = {
+        q: v for q, v in analysis.QUESTIONS.items()
+        if (v[0] == "both" and allowed("Equipment data") and allowed("Worker safety data"))
+        or (v[0] == "equipment" and allowed("Equipment data"))
+        or (v[0] == "safety" and allowed("Safety incidents"))
+    }
+    if not ok:
+        st.info("No questions are available for your account.")
+        return
+
+    labels = {"safety": "Safety", "equipment": "Equipment", "both": "Safety & Equipment"}
+    groups = {
+        label: [question for question, (category, _) in ok.items() if labels[category] == label]
+        for label in ("Safety", "Equipment", "Safety & Equipment")
+    }
+    active_groups = [(label, questions) for label, questions in groups.items() if questions]
+    tabs = st.tabs([label for label, _ in active_groups])
+    selected = st.session_state.get("analysis_question")
+    if selected not in ok:
+        selected = None
+    index = {question: i for i, question in enumerate(ok)}
+    for tab, (_, questions) in zip(tabs, active_groups):
+        with tab:
+            left, right = st.columns(2)
+            for i, question in enumerate(questions):
+                column = left if i % 2 == 0 else right
+                if column.button(question, key=f"analysis_question_{index[question]}", use_container_width=True):
+                    selected = question
+                    st.session_state["analysis_question"] = question
+
+    if selected is None:
+        st.info("Choose a question above to see its answer.")
+        return
+
+    st.markdown(f"**Question:** {selected}")
+    table, fig, text = ok[selected][1](d, inc)
     st.success(text)
     if fig is not None: st.plotly_chart(fig, use_container_width=True)
     show(table)
@@ -384,7 +417,7 @@ def page_users(d):
 # ---------- main ----------
 PAGES = {"Dashboard": ("View dashboard", page_dashboard), "Worker Safety": ("Worker safety data", page_workers), "Safety Incidents": ("Safety incidents", page_incidents),
          "Equipment": ("Equipment data", page_equipment), "Maintenance": ("Maintenance data", page_maintenance), "Risk Assessment": ("Risk assessment", page_risk),
-         "Alerts": ("View dashboard", page_alerts), "Data Analysis": ("View dashboard", page_analysis), "Reports": ("Generate reports", page_reports), "Manage Users": ("Manage users", page_users)}
+         "Alerts": ("View dashboard", page_alerts), "Questions & Answers": ("View dashboard", page_analysis), "Reports": ("Generate reports", page_reports), "Manage Users": ("Manage users", page_users)}
 
 
 def main():
